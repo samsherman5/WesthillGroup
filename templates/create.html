@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>CRUD Example - Create Customer</title>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+
+
+{# NavBar #}
+
+<nav class="navbar">
+
+    <a class="navbar-brand" href="/">Customers</a>
+
+</nav>
+
+
+{# Create user form #}
+
+<section>
+
+    <form method="post" action="/create">
+
+        <div>
+
+            <label for="Name">Name</label>
+
+            <input type="text" class="form-control" id="Name" name="Name">
+
+            <br>
+
+            <small class="form-text text-muted">This is the primary key for the customer. It must be unique.</small>
+
+        </div>
+
+
+        <br>
+
+
+        <div>
+
+            <label for="address">Address</label>
+
+            <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+
+        </div>
+
+
+        <br>
+
+
+        <div>
+
+            <label for="address_type">Address Type</label>
+
+            <select class="form-control" id="address_type" name="address_type">
+
+                <option value="personal" selected>Personal</option>
+
+                <option value="commercial">Commercial</option>
+
+            </select>
+
+        </div>
+
+
+        <br>
+
+
+        <div>
+
+            <label for="address">Instructions</label>
+
+            <textarea class="form-control" id="instructions" name="instructions" rows="5"></textarea>
+
+        </div>
+
+
+        <br>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+
+</section>
+
+
+
+</body>
+
+</html>
