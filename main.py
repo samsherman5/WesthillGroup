@@ -2,7 +2,13 @@
 
 from flask import Flask, request, render_template, redirect, send_from_directory
 
- 
+ #Sendgrid api key: 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
+ #Sendgrid libraries
+
+import sendgrid
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail, Email, To, Content
 
 from google.cloud import translate_v2 as translate
 
@@ -11,7 +17,6 @@ translate_client = translate.Client()
 # Imports the Google Cloud client library
 
 from google.cloud import datastore
-
  
 
 # START Translate requirements
@@ -176,7 +181,18 @@ def update(name):
 
  
 
- 
+#New: Send enpoint
+
+@app.route('/send/<name>', methods=['POST','GET'])
+def send(name):
+    if request.method == 'POST':
+        #Need to implement sendgrid sending for this part!
+        return redirect("/read/" + name)
+    else:
+        key = client.key(kind,name)
+        customer = client.get(key)
+        return render_template('send.html', name=customer['Name'], address=customer['address'],
+                               instructions=customer['instructions'], address_type=customer['address_type'])
 
 # Delete
 

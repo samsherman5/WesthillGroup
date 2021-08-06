@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>CRUD Example - Send to customer</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <nav class="navbar">
+            <a class="navbar-brand" href="/">Customers</a>
+            <a href="/create">Add Customer</a>
+        </nav>
+        <section>
+            <form method="post" action="/send/{{ name }}">
+                <div>
+                    <label for="address">Send Content</label>
+                    <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+    </body>
+</html>
