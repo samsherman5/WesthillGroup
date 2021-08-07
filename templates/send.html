@@ -13,10 +13,21 @@
             <a href="/create">Add Customer</a>
         </nav>
         <section>
+            <h1>Send message to {{ name }}</h1>
             <form method="post" action="/send/{{ name }}">
                 <div>
                     <label for="address">Send Content</label>
                     <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+                </div>
+                <br>
+                <div>
+                    <label for="language">Translate to</label>
+                    <select class="form-control" id="language" name="language">
+                        <option value="en" selected>English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">Dutch</option>
+                    </select>
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">Submit</button>

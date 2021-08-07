@@ -5,10 +5,14 @@ from flask import Flask, request, render_template, redirect, send_from_directory
  #Sendgrid api key: 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
  #Sendgrid libraries
 
+SENDGRIDKEY = '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'
+
 import sendgrid
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from sendgrid.helpers.mail import Mail, Email, To, Content
+
+#Translate
 
 from google.cloud import translate_v2 as translate
 
@@ -186,7 +190,24 @@ def update(name):
 @app.route('/send/<name>', methods=['POST','GET'])
 def send(name):
     if request.method == 'POST':
-        #Need to implement sendgrid sending for this part!
+        data = request.form.to_dict(flat=True)
+        key = client.key(kind,name)
+        customer = client.get(key)
+        contentToSend = data['content']
+        language = data['language']
+        translatedContent = translate_client.translate(contentToSend, language)
+        theWordTranslated = translate_client.translate("Translated", language)
+        sg = sendgrid.SendGridAPIClient(SENDGRIDKEY)
+        from_email = Email('westhillsender@bigyoshi.xyz')
+        to_email = To(customer['address'])
+        subject = "Message from Westhill Sender"
+        content = Content("text/plain", "Original: \n" + ''.join(contentToSend) + "\n\n" + theWordTranslated['translatedText'] + ":\n" + translatedContent['translatedText'])
+        mail = Mail(from_email, to_email, subject, content)
+        mail_json = mail.get()
+        #Send email
+        response = sg.client.mail.send.post(request_body=mail_json)
+        print(response.status_code)
+        print(response.headers)
         return redirect("/read/" + name)
     else:
         key = client.key(kind,name)
