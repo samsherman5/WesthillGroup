@@ -1,17 +1,27 @@
 # Required Flask Libraries
 
-from flask import Flask, request, render_template, redirect, send_from_directory
+from flask import Flask, request, render_template, redirect, send_from_directory, flash
 
  #Sendgrid api key: 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
  #Sendgrid libraries
 
+ 
+
 SENDGRIDKEY = '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'
+from io import BytesIO
+
+from google.cloud import texttospeech
+
+ttsclient = texttospeech.TextToSpeechClient()
 
 import sendgrid
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from sendgrid.helpers.mail import Mail, Email, To, Content
 
+#Blob storage
+
+from google.cloud import storage
 #Translate
 
 from google.cloud import translate_v2 as translate
@@ -215,6 +225,35 @@ def send(name):
         return render_template('send.html', name=customer['Name'], address=customer['address'],
                                instructions=customer['instructions'], address_type=customer['address_type'])
 
+
+#New: tts endpoint for demo
+@app.route('/tts', methods=['GET', 'POST'])
+def tts():
+    if request.method == 'POST':
+        import base64
+        data = request.form.to_dict(flat=True)
+        content = data['content']
+        synthesis_input = texttospeech.SynthesisInput(text=''.join(content))
+        voice = texttospeech.VoiceSelectionParams(
+            language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
+        )
+        audio_config = texttospeech.AudioConfig(
+            audio_encoding=texttospeech.AudioEncoding.LINEAR16
+        )
+        response = ttsclient.synthesize_speech(
+            input=synthesis_input, voice=voice, audio_config=audio_config
+        )
+
+        storage_client = storage.Client()
+        bucket = storage_client.bucket("westhill-group.appspot.com")
+        blob = bucket.blob("tts_blob.wav")
+
+        blob.upload_from_file(BytesIO(response.audio_content))
+
+        return render_template('tts.html', baseAudio="https://storage.cloud.google.com/westhill-group.appspot.com/tts_blob.wav")
+    else:
+        return render_template('tts.html')    
+
 # Delete
 
 @app.route('/delete/<name>', methods=['GET'])
@@ -227,9 +266,6 @@ def delete(name):
 
     return redirect('/')
 
- 
-
- 
 
 # Don't worry about this part
 

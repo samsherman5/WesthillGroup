@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>TTS Demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <nav class="navbar">
+            <a class="navbar-brand" href="/">Customers - Curd demo</a>
+        </nav>
+        <section>
+            <h1>Audio playback form</h1>
+            <form method="post" action="/tts">
+                <div>
+                    <label for="content">Text to be spoken</label>
+                    <textarea class="form-control" id="content" name="content" rows="5" maxlength="5000"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+        <audio controls="controls" id="audio" loop>
+            Your browser does not support the &lt;audio&gt; tag. 
+            <source id="source" src="{{ baseAudio }}" type="audio/wav" />
+        </audio>        
+        <p>{{ baseAudio }}</p>
+        <!-- <script type="text/javascript">
+            const blob = new Blob(getByteArray(), { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+
+            // Get DOM elements.
+            const audio = document.getElementById('audio');
+            const source = document.getElementById('source');
+
+            // Insert blob object URL into audio element & play.
+            source.src = url;
+            audio.load();
+            audio.play();
+            function getByteArray() {
+                // Convert byteArray into Uint8Array.
+                return new Uint8Array({{ baseAudio|list }});
+            }
+        </script> -->
+    </body>
+</html>
