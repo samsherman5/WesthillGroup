@@ -2,12 +2,12 @@
 
 from flask import Flask, request, render_template, redirect, send_from_directory, flash
 
- #Sendgrid api key: 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
+ #Sendgrid api key: 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
  #Sendgrid libraries
 
  
 
-SENDGRIDKEY = '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'
+SENDGRIDKEY = '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'
 from io import BytesIO
 
 from google.cloud import texttospeech
