@@ -202,11 +202,14 @@ def send(name):
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
         key = client.key(kind,name)
+        #Gets customer w/ address
         customer = client.get(key)
         contentToSend = data['content']
+        #Gets language selected in form
         language = data['language']
         translatedContent = translate_client.translate(contentToSend, language)
         theWordTranslated = translate_client.translate("Translated", language)
+        #Gets the sendgrid client and stores it
         sg = sendgrid.SendGridAPIClient(SENDGRIDKEY)
         from_email = Email('westhillsender@bigyoshi.xyz')
         to_email = To(customer['address'])
@@ -216,8 +219,6 @@ def send(name):
         mail_json = mail.get()
         #Send email
         response = sg.client.mail.send.post(request_body=mail_json)
-        print(response.status_code)
-        print(response.headers)
         return redirect("/read/" + name)
     else:
         key = client.key(kind,name)
@@ -230,24 +231,29 @@ def send(name):
 @app.route('/tts', methods=['GET', 'POST'])
 def tts():
     if request.method == 'POST':
-        import base64
         data = request.form.to_dict(flat=True)
         content = data['content']
+        
+        #Creates synthesis object with form content
         synthesis_input = texttospeech.SynthesisInput(text=''.join(content))
+        #Voice parameters
         voice = texttospeech.VoiceSelectionParams(
             language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
         )
+        #Audio encoding parameters
         audio_config = texttospeech.AudioConfig(
             audio_encoding=texttospeech.AudioEncoding.LINEAR16
         )
+        #Gets response
         response = ttsclient.synthesize_speech(
             input=synthesis_input, voice=voice, audio_config=audio_config
         )
-
+        
+        #Calls gcloud storage client
         storage_client = storage.Client()
+        #Uploads audio file to default bucket
         bucket = storage_client.bucket("westhill-group.appspot.com")
         blob = bucket.blob("tts_blob.wav")
-
         blob.upload_from_file(BytesIO(response.audio_content))
 
         return render_template('tts.html', baseAudio="https://storage.cloud.google.com/westhill-group.appspot.com/tts_blob.wav")
