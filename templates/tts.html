@@ -26,22 +26,5 @@
             <source id="source" src="{{ baseAudio }}" type="audio/wav" />
         </audio>        
         <p>{{ baseAudio }}</p>
-        <!-- <script type="text/javascript">
-            const blob = new Blob(getByteArray(), { type: 'audio/wav' });
-            const url = URL.createObjectURL(blob);
-
-            // Get DOM elements.
-            const audio = document.getElementById('audio');
-            const source = document.getElementById('source');
-
-            // Insert blob object URL into audio element & play.
-            source.src = url;
-            audio.load();
-            audio.play();
-            function getByteArray() {
-                // Convert byteArray into Uint8Array.
-                return new Uint8Array({{ baseAudio|list }});
-            }
-        </script> -->
     </body>
 </html>
